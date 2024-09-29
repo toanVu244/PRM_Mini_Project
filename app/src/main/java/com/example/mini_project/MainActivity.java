@@ -1,14 +1,14 @@
 package com.example.mini_project;
 
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,32 +21,16 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    SeekBar seekBarLine1;
-    SeekBar seekBarLine2;
-    SeekBar seekBarLine3;
-    SeekBar seekBarLine4;
-    SeekBar seekBarLine5;
-    Button btnStart;
-    Button btnReStart;
-    CheckBox cbLine1;
-    CheckBox cbLine2;
-    CheckBox cbLine3;
-    CheckBox cbLine4;
-    CheckBox cbLine5;
-    boolean choiceLine1 = false;
-    boolean choiceLine2 = false;
-    boolean choiceLine3 = false;
-    boolean choiceLine4 = false;
-    boolean choiceLine5 = false;
-    boolean restarted = true;
-    int money = 1000;
+    SeekBar seekBarLine1, seekBarLine2, seekBarLine3, seekBarLine4, seekBarLine5;
+    Button btnStart, btnReStart;
+    CheckBox cbLine1, cbLine2, cbLine3, cbLine4, cbLine5;
+    boolean choiceLine1 = false, choiceLine2 = false, choiceLine3 = false, choiceLine4 = false, choiceLine5 = false;
+    boolean restarted = true, raceFinished = false;
+    int money = 1000, totalBet = 0, spdLine1, spdLine2, spdLine3, spdLine4, spdLine5;
     TextView tvMoney;
-    int totalBet = 0;
-    int spdLine1, spdLine2, spdLine3, spdLine4, spdLine5;
-    boolean raceFinished = false;
     ArrayList<Integer> chosenLines = new ArrayList<>();
     Handler handler = new Handler();
-
+    MediaPlayer startSound, endSound, backgroundMusic, clickSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,59 +55,36 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Chúc mừng bạn nhận: " + money + " đồng từ hệ thống", Toast.LENGTH_SHORT).show();
         tvMoney.setText("1000");
 
-        cbLine1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                choiceLine1 = isChecked;
+        cbLine1.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine1 = isChecked);
+        cbLine2.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine2 = isChecked);
+        cbLine3.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine3 = isChecked);
+        cbLine4.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine4 = isChecked);
+        cbLine5.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine5 = isChecked);
+
+        Switch switchMusic = findViewById(R.id.switchMusic);
+        startSound = MediaPlayer.create(this, R.raw.nen);
+        endSound = MediaPlayer.create(this, R.raw.nen);
+        clickSound = MediaPlayer.create(this, R.raw.nen);
+        backgroundMusic = MediaPlayer.create(this, R.raw.nen);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.start();
+
+        switchMusic.setChecked(true);
+        switchMusic.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) backgroundMusic.start();
+            else backgroundMusic.pause();
+        });
+
+        btnStart.setOnClickListener(view -> {
+            if (!raceFinished && gambit()) {
+                clickSound.start();
+                startSound.start();
+                setUpSpeed();
+                startRace();
             }
         });
 
-        cbLine2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                choiceLine2 = isChecked;
-            }
-        });
-
-        cbLine3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                choiceLine3 = isChecked;
-            }
-        });
-
-        cbLine4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                choiceLine4 = isChecked;
-            }
-        });
-
-        cbLine5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                choiceLine5 = isChecked;
-            }
-        });
-
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (gambit()) {
-                    setUpSpeed();
-                    createRunnable(seekBarLine1, spdLine1, 1);
-                    createRunnable(seekBarLine2, spdLine2, 2);
-                    createRunnable(seekBarLine3, spdLine3, 3);
-                    createRunnable(seekBarLine4, spdLine4, 4);
-                    createRunnable(seekBarLine5, spdLine5, 5);
-                    restarted = false;
-                }
-            }
-        });
-
-        btnReStart.setOnClickListener(view -> {
-            resetRace();
-        });
+        btnReStart.setOnClickListener(view -> resetRace());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -132,7 +93,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void createRunnable(SeekBar seekBar, int spd, int lineName) {
+    public void startRace() {
+        raceFinished = false;
+        createRunnable(seekBarLine1, spdLine1, "Line 1");
+        createRunnable(seekBarLine2, spdLine2, "Line 2");
+        createRunnable(seekBarLine3, spdLine3, "Line 3");
+        createRunnable(seekBarLine4, spdLine4, "Line 4");
+        createRunnable(seekBarLine5, spdLine5, "Line 5");
+    }
+
+    public void createRunnable(SeekBar seekBar, int spd, String lineName) {
         Runnable runnable = new Runnable() {
             int progress = 0;
             @Override
@@ -144,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         seekBar.setProgress(progress);
                         if (!raceFinished) {
                             checkWinner(lineName);
+                            endSound.start();
                             raceFinished = true;
                         }
                     } else {
@@ -178,6 +149,27 @@ public class MainActivity extends AppCompatActivity {
         seekBarLine5.setProgress(0);
         handler.removeCallbacksAndMessages(null);
         restarted = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (backgroundMusic != null) {
+            backgroundMusic.release();
+            backgroundMusic = null;
+        }
+        if (startSound != null) {
+            startSound.release();
+            startSound = null;
+        }
+        if (endSound != null) {
+            endSound.release();
+            endSound = null;
+        }
+        if (clickSound != null) {
+            clickSound.release();
+            clickSound = null;
+        }
     }
 
     public boolean gambit() {
@@ -250,5 +242,4 @@ public class MainActivity extends AppCompatActivity {
         }
         tvMoney.setText(String.valueOf(money));
     }
-
 }
