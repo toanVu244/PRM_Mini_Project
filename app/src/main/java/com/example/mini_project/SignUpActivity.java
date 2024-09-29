@@ -70,6 +70,10 @@ public class SignUpActivity extends AppCompatActivity {
                     editor.apply();
                     // Xử lý tạo tài khoản thành công (giả định)
                     Toast.makeText(SignUpActivity.this, "Tạo tài khoản thành công!", Toast.LENGTH_SHORT).show();
+
+                    // gi vào file json máy ảo  
+                    JsonUntils.register(v.getContext(),newUsername,newPassword);
+
                     finish(); // Quay lại màn hình đăng nhập
                 }
             }
