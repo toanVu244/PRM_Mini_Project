@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Phần track (nền) của SeekBar -->
+    <item android:id="@android:id/background">
+        <drawable android:drawable="@drawable/road" />
+    </item>
+
+    <!-- Phần progress -->
+    <item android:id="@android:id/progress">
+        <shape>
+            <solid android:color="#FF0000" /> <!-- Màu của phần tiến trình -->
+        </shape>
+    </item>
+</layer-list>

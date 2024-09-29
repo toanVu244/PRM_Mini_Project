@@ -11,7 +11,9 @@
         android:id="@+id/seekBarLine2"
         android:layout_width="660dp"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_road"
+        android:progress="0"
+        android:thumb="@drawable/rotate_car_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -23,19 +25,23 @@
         android:id="@+id/seekBarLine1"
         android:layout_width="660dp"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_road"
+        android:progress="0"
+        android:thumb="@drawable/rotate_car_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <SeekBar
         android:id="@+id/seekBarLine5"
         android:layout_width="660dp"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_road"
+        android:progress="0"
+        android:thumb="@drawable/rotate_car_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -47,7 +53,9 @@
         android:id="@+id/seekBarLine4"
         android:layout_width="660dp"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_road"
+        android:progress="0"
+        android:thumb="@drawable/rotate_car_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -59,7 +67,9 @@
         android:id="@+id/seekBarLine3"
         android:layout_width="660dp"
         android:layout_height="60dp"
-        android:background="@color/white"
+        android:background="@drawable/custom_road"
+        android:progress="0"
+        android:thumb="@drawable/rotate_car_red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -93,9 +103,9 @@
 
     <CheckBox
         android:id="@+id/checkBoxLine2"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="60dp"
-        android:text="Line2"
+        android:text="Line 2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -105,9 +115,9 @@
 
     <CheckBox
         android:id="@+id/checkBoxLine5"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="60dp"
-        android:text="Line2"
+        android:text="Line 5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -117,9 +127,9 @@
 
     <CheckBox
         android:id="@+id/checkBoxLine4"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="60dp"
-        android:text="Line2"
+        android:text="Line 4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -129,9 +139,9 @@
 
     <CheckBox
         android:id="@+id/checkBoxLine3"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="60dp"
-        android:text="Line2"
+        android:text="Line 3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.001"
@@ -141,14 +151,26 @@
 
     <CheckBox
         android:id="@+id/checkBoxLine1"
-        android:layout_width="70dp"
+        android:layout_width="80dp"
         android:layout_height="60dp"
-        android:text="Line2"
+        android:text="Line 1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.001"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textViewMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.826" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

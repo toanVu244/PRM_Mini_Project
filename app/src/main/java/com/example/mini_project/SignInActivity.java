@@ -44,7 +44,10 @@ public class SignInActivity extends Activity {
 
                     if (username.equals(savedUsername) && password.equals(savedPassword)) {
                         Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        // Tiếp tục điều hướng đến trang chính của ứng dụng hoặc thực hiện các hành động khác
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+
                     } else {
                         Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
                     }
@@ -52,7 +55,6 @@ public class SignInActivity extends Activity {
             }
         });
 
-        // Chuyển sang giao diện SignUp
         textViewCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
