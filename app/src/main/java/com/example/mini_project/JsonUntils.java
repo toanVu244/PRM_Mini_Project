@@ -91,7 +91,7 @@ public static void writeUserListToFile(Context context, List<Account> userList, 
             }
         }
         List<History> histories = new ArrayList<>();
-        Account newAccount = new Account(histories, 100, username, password, "USER" + (userList.size() + 1));
+        Account newAccount = new Account(histories, 100, password, username, "USER" + (userList.size() + 1));
         userList.add(newAccount);
 
         writeUserListToFile(ct, userList, "Account.json");
@@ -114,11 +114,30 @@ public static void writeUserListToFile(Context context, List<Account> userList, 
                 return account.getHistories();
             }
         }
-
         Log.d("GetHistories", "No user found with username: " + username);
         return null;
     }
 
+    public static boolean addHistoryToAccount(Context ct, String username, History newHistory) {
+        // Đọc danh sách tài khoản từ file JSON
+        List<Account> userList = readUserListFromFile(ct, "Account.json");
+
+        if (userList != null) {
+            // Duyệt qua danh sách để tìm tài khoản cần thêm lịch sử
+            for (Account account : userList) {
+                if (account.getUsername().equals(username)) {
+                    // Thêm History mới vào danh sách histories của tài khoản
+                    account.getHistories().add(newHistory);
+
+                    // Ghi lại danh sách tài khoản vào file JSON để lưu thay đổi
+                    writeUserListToFile(ct, userList, "Account.json");
+                    return true; // Thêm thành công
+                }
+            }
+        }
+
+        return false; // Không tìm thấy tài khoản hoặc danh sách trống
+    }
 
 
 

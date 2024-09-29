@@ -1,37 +1,37 @@
 package com.example.mini_project;
 
 public class History {
-    private double MoneyBetting;
-    private double MoneyGet;
-    private String winer;
+    private int MoneyBetting;
+    private int MoneyGet;
+    private int winer;
 
-    public History(double moneyBetting, double moneyGet, String winer) {
+    public History(int moneyBetting, int moneyGet, int winer) {
         MoneyBetting = moneyBetting;
         MoneyGet = moneyGet;
         this.winer = winer;
     }
 
-    public String getWiner() {
+    public int getWiner() {
         return winer;
     }
 
-    public void setWiner(String winer) {
+    public void setWiner(int winer) {
         this.winer = winer;
     }
 
-    public double getMoneyGet() {
+    public int getMoneyGet() {
         return MoneyGet;
     }
 
-    public void setMoneyGet(double moneyGet) {
+    public void setMoneyGet(int moneyGet) {
         MoneyGet = moneyGet;
     }
 
-    public double getMoneyBetting() {
+    public int getMoneyBetting() {
         return MoneyBetting;
     }
 
-    public void setMoneyBetting(double moneyBetting) {
+    public void setMoneyBetting(int moneyBetting) {
         MoneyBetting = moneyBetting;
     }
 }

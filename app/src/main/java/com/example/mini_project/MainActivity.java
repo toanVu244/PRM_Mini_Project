@@ -1,9 +1,12 @@
 package com.example.mini_project;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
@@ -22,7 +25,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     SeekBar seekBarLine1, seekBarLine2, seekBarLine3, seekBarLine4, seekBarLine5;
-    Button btnStart, btnReStart;
+    Button btnStart, btnReStart, btnHistory;
     CheckBox cbLine1, cbLine2, cbLine3, cbLine4, cbLine5;
     boolean choiceLine1 = false, choiceLine2 = false, choiceLine3 = false, choiceLine4 = false, choiceLine5 = false;
     boolean restarted = true, raceFinished = false;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         seekBarLine5 = findViewById(R.id.seekBarLine5);
         btnStart = findViewById(R.id.buttonStart);
         btnReStart = findViewById(R.id.buttonRestart);
+        btnHistory = findViewById(R.id.buttonHistory);
         cbLine1 = findViewById(R.id.checkBoxLine1);
         cbLine2 = findViewById(R.id.checkBoxLine2);
         cbLine3 = findViewById(R.id.checkBoxLine3);
@@ -86,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnReStart.setOnClickListener(view -> resetRace());
 
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Histories.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -105,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     public void createRunnable(SeekBar seekBar, int spd, int lineName) {
         Runnable runnable = new Runnable() {
             int progress = 0;
+
             @Override
             public void run() {
                 if (!raceFinished) {
@@ -241,5 +254,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Bạn đã thua cược!", Toast.LENGTH_SHORT).show();
         }
         tvMoney.setText(String.valueOf(money));
+        History history = new History(totalBet, winnings, winningLine);
+        SharedPreferences sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+        String savedUsername = sharedPreferences.getString("username", null);
+        JsonUntils.addHistoryToAccount(MainActivity.this, savedUsername, history);
+
     }
 }
