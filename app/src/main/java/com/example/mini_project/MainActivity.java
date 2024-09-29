@@ -95,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void startRace() {
         raceFinished = false;
-        createRunnable(seekBarLine1, spdLine1, "Line 1");
-        createRunnable(seekBarLine2, spdLine2, "Line 2");
-        createRunnable(seekBarLine3, spdLine3, "Line 3");
-        createRunnable(seekBarLine4, spdLine4, "Line 4");
-        createRunnable(seekBarLine5, spdLine5, "Line 5");
+        createRunnable(seekBarLine1, spdLine1, 1);
+        createRunnable(seekBarLine2, spdLine2, 2);
+        createRunnable(seekBarLine3, spdLine3, 3);
+        createRunnable(seekBarLine4, spdLine4, 4);
+        createRunnable(seekBarLine5, spdLine5, 5);
     }
 
-    public void createRunnable(SeekBar seekBar, int spd, String lineName) {
+    public void createRunnable(SeekBar seekBar, int spd, int lineName) {
         Runnable runnable = new Runnable() {
             int progress = 0;
             @Override
