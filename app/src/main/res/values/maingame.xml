@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rules_title">Quy Tắc Chơi Đua Xe</string>
+    <string name="rules_text">1. Nhấn nút Close để đóng thông báo.\n\n2. Xe sẽ tự động chạy trong làn của mình.\n\n3. Xe nào vượt qua vạch đích đầu tiên sẽ thắng.\n\n4. Bạn có thể thoát trò chơi bất kỳ lúc nào bằng cách nhấn nút Log Out.</string>
+    <string name="close_button_text">Close</string>
+</resources>
