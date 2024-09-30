@@ -47,15 +47,30 @@ public class SignInActivity extends Activity {
                     String savedUsername = sharedPreferences.getString("username", null);
                     String savedPassword = sharedPreferences.getString("password", null);
 
-                    if (username.equals(savedUsername) && password.equals(savedPassword)) {
-                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    } else {
-                        Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
+//                    if (username.equals(savedUsername) && password.equals(savedPassword)) {
+//                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//
+//                    } else {
+//                        Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
+//                    }
+                   Boolean checkLogin = JsonUntils.login(v.getContext(),savedUsername,savedPassword);
+                   if (checkLogin == true){
+                       SharedPreferences shared = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+                       SharedPreferences.Editor editor = shared.edit();
+                       editor.putString("username", savedUsername);
+                       editor.putString("password", savedPassword);
+                       editor.apply();
+                       Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                       Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                       startActivity(intent);
+                    finish();
+                   }
+                   else {
+                       Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
+                   }
                 }
             }
         });
