@@ -29,17 +29,20 @@ public class MainActivity extends AppCompatActivity {
     CheckBox cbLine1, cbLine2, cbLine3, cbLine4, cbLine5;
     boolean choiceLine1 = false, choiceLine2 = false, choiceLine3 = false, choiceLine4 = false, choiceLine5 = false;
     boolean restarted = true, raceFinished = false;
-    int money = 1000, totalBet = 0, spdLine1, spdLine2, spdLine3, spdLine4, spdLine5;
+    int money = 0, totalBet = 0, spdLine1, spdLine2, spdLine3, spdLine4, spdLine5;
     TextView tvMoney;
     ArrayList<Integer> chosenLines = new ArrayList<>();
     Handler handler = new Handler();
     MediaPlayer startSound, endSound, backgroundMusic, clickSound;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
+        String savedUsername = sharedPreferences.getString("username", null);
 
         seekBarLine1 = findViewById(R.id.seekBarLine1);
         seekBarLine2 = findViewById(R.id.seekBarLine2);
@@ -56,8 +59,18 @@ public class MainActivity extends AppCompatActivity {
         cbLine5 = findViewById(R.id.checkBoxLine5);
         tvMoney = findViewById(R.id.textViewMoney);
 
-        Toast.makeText(this, "Chúc mừng bạn nhận: " + money + " đồng từ hệ thống", Toast.LENGTH_SHORT).show();
-        tvMoney.setText("1000");
+        Account ac = JsonUntils.getAccountInfo(MainActivity.this,savedUsername);
+        if(ac.getMoney()==0){
+            money = 1000;
+            Toast.makeText(this, "Chúc mừng bạn nhận: " + money + " đồng từ hệ thống", Toast.LENGTH_SHORT).show();
+            tvMoney.setText(""+money);
+        }else {
+            money = ac.getMoney();
+            tvMoney.setText(""+money);
+        }
+
+
+
 
         cbLine1.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine1 = isChecked);
         cbLine2.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine2 = isChecked);
@@ -257,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
         History history = new History(totalBet, winnings, winningLine);
         SharedPreferences sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         String savedUsername = sharedPreferences.getString("username", null);
+        JsonUntils.updateMoneyForAccount(MainActivity.this,savedUsername,money);
         JsonUntils.addHistoryToAccount(MainActivity.this, savedUsername, history);
 
     }

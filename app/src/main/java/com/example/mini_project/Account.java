@@ -8,10 +8,10 @@ public class Account {
     private String id;
     private String Username;
     private String Password;
-    private double money;
+    private int money;
     List<History> histories;
 
-    public Account(List<History> histories, double money, String password, String username, String id) {
+    public Account(List<History> histories, int money, String password, String username, String id) {
         this.histories = histories;
         this.money = money;
         Password = password;
@@ -43,11 +43,11 @@ public class Account {
         Password = password;
     }
 
-    public double getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(double money) {
+    public void setMoney(int money) {
         this.money = money;
     }
 

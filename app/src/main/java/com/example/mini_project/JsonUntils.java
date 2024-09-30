@@ -91,7 +91,7 @@ public static void writeUserListToFile(Context context, List<Account> userList, 
             }
         }
         List<History> histories = new ArrayList<>();
-        Account newAccount = new Account(histories, 100, password, username, "USER" + (userList.size() + 1));
+        Account newAccount = new Account(histories, 0, password, username, "USER" + (userList.size() + 1));
         userList.add(newAccount);
 
         writeUserListToFile(ct, userList, "Account.json");
@@ -137,6 +137,30 @@ public static void writeUserListToFile(Context context, List<Account> userList, 
         }
 
         return false; // Không tìm thấy tài khoản hoặc danh sách trống
+    }
+    public static Account getAccountInfo(Context context, String username) {
+        List<Account> userList = JsonUntils.readUserListFromFile(context, "Account.json");
+        if (userList != null) {
+            for (Account account : userList) {
+                if (account.getUsername().equals(username)) {
+                    return account;
+                }
+            }
+        }
+        return null; // Nếu không tìm thấy tài khoản
+    }
+    public static boolean updateMoneyForAccount(Context context, String username, int newMoney) {
+        List<Account> userList = JsonUntils.readUserListFromFile(context, "Account.json");
+        if (userList != null) {
+            for (Account account : userList) {
+                if (account.getUsername().equals(username)) {
+                    account.setMoney(newMoney);
+                    JsonUntils.writeUserListToFile(context, userList, "Account.json");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
