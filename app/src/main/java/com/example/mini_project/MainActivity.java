@@ -1,5 +1,6 @@
 package com.example.mini_project;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -9,11 +10,13 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> chosenLines = new ArrayList<>();
     Handler handler = new Handler();
     MediaPlayer startSound, endSound, backgroundMusic, clickSound;
+    EditText etLine1, etLine2, etLine3, etLine4, etLine5;
 
 
     @Override
@@ -58,19 +62,21 @@ public class MainActivity extends AppCompatActivity {
         cbLine4 = findViewById(R.id.checkBoxLine4);
         cbLine5 = findViewById(R.id.checkBoxLine5);
         tvMoney = findViewById(R.id.textViewMoney);
+        etLine1 = findViewById(R.id.editTextLine1);
+        etLine2 = findViewById(R.id.editTextLine2);
+        etLine3 = findViewById(R.id.editTextLine3);
+        etLine4 = findViewById(R.id.editTextLine4);
+        etLine5 = findViewById(R.id.editTextLine5);
 
-        Account ac = JsonUntils.getAccountInfo(MainActivity.this,savedUsername);
-        if(ac.getMoney()==0){
+        Account ac = JsonUntils.getAccountInfo(MainActivity.this, savedUsername);
+        if (ac.getMoney() == 0) {
             money = 1000;
             Toast.makeText(this, "Chúc mừng bạn nhận: " + money + " đồng từ hệ thống", Toast.LENGTH_SHORT).show();
-            tvMoney.setText(""+money);
-        }else {
+            tvMoney.setText("" + money);
+        } else {
             money = ac.getMoney();
-            tvMoney.setText(""+money);
+            tvMoney.setText("" + money);
         }
-
-
-
 
         cbLine1.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine1 = isChecked);
         cbLine2.setOnCheckedChangeListener((buttonView, isChecked) -> choiceLine2 = isChecked);
@@ -92,16 +98,28 @@ public class MainActivity extends AppCompatActivity {
             else backgroundMusic.pause();
         });
 
-        btnStart.setOnClickListener(view -> {
-            if (!raceFinished && gambit()) {
-                clickSound.start();
-                startSound.start();
-                setUpSpeed();
-                startRace();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (gambit()) {
+                    clickSound.start();
+                    startSound.start();
+                    setUpSpeed();
+                    startRace();
+                }
             }
         });
 
-        btnReStart.setOnClickListener(view -> resetRace());
+        btnReStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (raceFinished) {
+                    resetRace();
+                } else {
+                    Toast.makeText(MainActivity.this, "Vui lòng chờ cuộc đua kết thúc!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         btnHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,26 +222,50 @@ public class MainActivity extends AppCompatActivity {
                 totalBet = 0;
                 chosenLines.clear();
                 if (choiceLine1) {
-                    totalBet += 10;
-                    chosenLines.add(1);
+                    if (etLine1.getText() != null) {
+                        totalBet += Integer.parseInt(etLine1.getText().toString());
+                        chosenLines.add(1);
+                    } else {
+                        Toast.makeText(this, "Vui lòng nhập tiền cược bắt đầu!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
                 if (choiceLine2) {
-                    totalBet += 10;
-                    chosenLines.add(2);
+                    if (etLine2.getText() != null) {
+                        totalBet += Integer.parseInt(etLine2.getText().toString());
+                        chosenLines.add(2);
+                    } else {
+                        Toast.makeText(this, "Vui lòng nhập tiền cược bắt đầu!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
                 if (choiceLine3) {
-                    totalBet += 10;
-                    chosenLines.add(3);
+                    if (etLine3.getText() != null) {
+                        totalBet += Integer.parseInt(etLine3.getText().toString());
+                        chosenLines.add(3);
+                    } else {
+                        Toast.makeText(this, "Vui lòng nhập tiền cược bắt đầu!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
                 if (choiceLine4) {
-                    totalBet += 10;
-                    chosenLines.add(4);
+                    if (etLine4.getText() != null) {
+                        totalBet += Integer.parseInt(etLine4.getText().toString());
+                        chosenLines.add(4);
+                    } else {
+                        Toast.makeText(this, "Vui lòng nhập tiền cược bắt đầu!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
                 if (choiceLine5) {
-                    totalBet += 20;
-                    chosenLines.add(5);
+                    if (etLine5.getText() != null) {
+                        totalBet += Integer.parseInt(etLine5.getText().toString());
+                        chosenLines.add(5);
+                    } else {
+                        Toast.makeText(this, "Vui lòng nhập tiền cược bắt đầu!", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                 }
-
                 if (chosenLines.size() > 0) {
                     if (totalBet <= money) {
                         tvMoney.setText(String.valueOf(money - totalBet));
@@ -253,25 +295,49 @@ public class MainActivity extends AppCompatActivity {
         int winnings = 0;
 
         if (chosenLines.contains(winningLine)) {
-            if (winningLine == 5) {
-                winnings += 20 * 2;
-            } else {
-                winnings += 10 * 2;
-            }
+            winnings += totalBet*2;
         }
 
         if (winnings > 0) {
             money += winnings;
-            Toast.makeText(MainActivity.this, "Bạn đã thắng! Nhận được " + winnings + " đồng", Toast.LENGTH_SHORT).show();
+            showVictoryDialog(winningLine, winnings);
         } else {
-            Toast.makeText(MainActivity.this, "Bạn đã thua cược!", Toast.LENGTH_SHORT).show();
+            showLoseDialog(winningLine);
         }
         tvMoney.setText(String.valueOf(money));
         History history = new History(totalBet, winnings, winningLine);
+
         SharedPreferences sharedPreferences = getSharedPreferences("USER_CREDENTIALS", MODE_PRIVATE);
         String savedUsername = sharedPreferences.getString("username", null);
-        JsonUntils.updateMoneyForAccount(MainActivity.this,savedUsername,money);
+        JsonUntils.updateMoneyForAccount(MainActivity.this, savedUsername, money);
         JsonUntils.addHistoryToAccount(MainActivity.this, savedUsername, history);
+    }
 
+    private void showVictoryDialog(int lineName, int moneyGet) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Victory!");
+        builder.setMessage("Hàng " + lineName + " đã chiến thắng! Bạn nhận " + moneyGet + " !");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showLoseDialog(int lineName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Lose!");
+        builder.setMessage("Hàng " + lineName + " đã chiến thắng! Bạn nhận 0 đồng !");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

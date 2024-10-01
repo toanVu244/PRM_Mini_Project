@@ -64,9 +64,9 @@ public class SignInActivity extends Activity {
                        editor.putString("password", savedPassword);
                        editor.apply();
                        Toast.makeText(SignInActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                       Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                       Intent intent = new Intent(SignInActivity.this, Thongbao.class);
                        startActivity(intent);
-                    finish();
+                       finish();
                    }
                    else {
                        Toast.makeText(SignInActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
